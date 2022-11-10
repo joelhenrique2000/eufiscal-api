@@ -35,9 +35,7 @@ model Problema {
   fotoURL String 
   isResidente Boolean
   latitude BigInt
-  longitude BigInt
-  cidade String 
-  estado String 
+  longitude BigInt 
   criadoEm DateTime
   atualizadoEm DateTime
   removidoEm DateTime
@@ -45,6 +43,8 @@ model Problema {
   categoriaID  Int
   status    Status    @relation(fields: [statusID], references: [id])
   statusID  Int
+  cidade    Cidade    @relation(fields: [cidadeID], references: [id])
+  cidadeID  Int
 }
 
 model Usuario {
@@ -56,4 +56,22 @@ model Usuario {
   criadoEm DateTime
   atualizadoEm DateTime
   removidoEm DateTime
+}
+
+model Estado {
+  id Int @id @default(autoincrement())
+  nome String 
+  criadoEm DateTime
+  atualizadoEm DateTime
+  removidoEm DateTime
+}
+
+model Cidade {
+  id Int @id @default(autoincrement())
+  nome String 
+  criadoEm DateTime
+  atualizadoEm DateTime
+  removidoEm DateTime
+  estado Estado @relation(fields: [estadoID], references: [id])
+  estadoID  Int
 }
