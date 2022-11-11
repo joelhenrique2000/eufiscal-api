@@ -61,6 +61,7 @@ model Usuario {
 model Estado {
   id Int @id @default(autoincrement())
   nome String 
+  sigla String 
   criadoEm DateTime
   atualizadoEm DateTime
   removidoEm DateTime
