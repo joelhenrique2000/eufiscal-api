@@ -64,6 +64,7 @@ model Estado {
   criadoEm DateTime
   atualizadoEm DateTime
   removidoEm DateTime
+  cidades Cidade[]
 }
 
 model Cidade {
@@ -74,4 +75,5 @@ model Cidade {
   removidoEm DateTime
   estado Estado @relation(fields: [estadoID], references: [id])
   estadoID  Int
+  problemas Problema[]
 }
