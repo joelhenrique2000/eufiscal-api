@@ -14,18 +14,18 @@ model Categoria {
   id Int @id @default(autoincrement())
   nome String @unique
   tagIcon String 
-  criadoEm DateTime
-  atualizadoEm DateTime
-  removidoEm DateTime
+  criadoEm DateTime @default(now())
+  atualizadoEm DateTime? @updatedAt
+  removidoEm DateTime?
   problemas Problema[]
 }
 
 model Status {
   id Int @id @default(autoincrement())
   nome String @unique
-  criadoEm DateTime
-  atualizadoEm DateTime
-  removidoEm DateTime
+  criadoEm DateTime @default(now())
+  atualizadoEm DateTime? @updatedAt
+  removidoEm DateTime?
   problemas Problema[]
 }
 
@@ -36,9 +36,9 @@ model Problema {
   isResidente Boolean
   latitude BigInt
   longitude BigInt 
-  criadoEm DateTime
-  atualizadoEm DateTime
-  removidoEm DateTime
+  criadoEm DateTime @default(now())
+  atualizadoEm DateTime? @updatedAt
+  removidoEm DateTime?
   categoria    Categoria    @relation(fields: [categoriaID], references: [id])
   categoriaID  Int
   status    Status    @relation(fields: [statusID], references: [id])
@@ -53,27 +53,27 @@ model Usuario {
   cpf String 
   email String 
   senha String 
-  criadoEm DateTime
-  atualizadoEm DateTime
-  removidoEm DateTime
+  criadoEm DateTime   @default(now())
+  atualizadoEm DateTime? @updatedAt
+  removidoEm DateTime?
 }
 
 model Estado {
   id Int @id @default(autoincrement())
   nome String 
   sigla String 
-  criadoEm DateTime
-  atualizadoEm DateTime
-  removidoEm DateTime
+  criadoEm DateTime  @default(now())
+  atualizadoEm DateTime? @updatedAt
+  removidoEm DateTime?
   cidades Cidade[]
 }
 
 model Cidade {
   id Int @id @default(autoincrement())
   nome String 
-  criadoEm DateTime
-  atualizadoEm DateTime
-  removidoEm DateTime
+  criadoEm DateTime @default(now())
+  atualizadoEm DateTime? @updatedAt
+  removidoEm DateTime?
   estado Estado @relation(fields: [estadoID], references: [id])
   estadoID  Int
   problemas Problema[]
