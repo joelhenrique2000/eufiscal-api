@@ -27,6 +27,7 @@ model Status {
   atualizadoEm DateTime? @updatedAt
   removidoEm DateTime?
   problemas Problema[]
+  historicos HistoricoProblema[]
 }
 
 model Problema {
@@ -45,6 +46,16 @@ model Problema {
   statusID  Int
   cidade    Cidade    @relation(fields: [cidadeID], references: [id])
   cidadeID  Int
+  historicos HistoricoProblema[]
+}
+
+model HistoricoProblema{
+  id Int @id @default(autoincrement())
+  problema    Problema    @relation(fields: [problemaID], references: [id])
+  problemaID  Int
+  status    Status    @relation(fields: [statusID], references: [id])
+  statusID  Int
+
 }
 
 model Usuario {
@@ -71,6 +82,8 @@ model Estado {
 model Cidade {
   id Int @id @default(autoincrement())
   nome String 
+  latitude BigInt
+  longitude BigInt 
   criadoEm DateTime @default(now())
   atualizadoEm DateTime? @updatedAt
   removidoEm DateTime?
