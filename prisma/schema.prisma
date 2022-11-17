@@ -13,7 +13,6 @@ datasource db {
 model Categoria {
   id Int @id @default(autoincrement())
   nome String @unique
-  tagIcon String 
   criadoEm DateTime @default(now())
   atualizadoEm DateTime? @updatedAt
   removidoEm DateTime?

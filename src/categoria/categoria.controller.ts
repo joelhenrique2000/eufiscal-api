@@ -14,7 +14,11 @@ export class CategoriaController {
 
   @Get()
   findAll() {
-    return this.categoriaService.findAll();
+    return this.categoriaService.findAll({
+      where: {
+        removidoEm: null
+      }
+    });
   }
 
   @Get(':id')
@@ -24,11 +28,20 @@ export class CategoriaController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCategoriaDto: UpdateCategoriaDto) {
-    return this.categoriaService.update(+id, updateCategoriaDto);
+    return this.categoriaService.update({
+      where : {
+        id: +id
+      },
+      data: updateCategoriaDto
+    });
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.categoriaService.remove(+id);
+    return this.categoriaService.remove({
+      where : {
+        id: +id
+      }
+    });
   }
 }

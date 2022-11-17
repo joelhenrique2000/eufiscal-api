@@ -1,6 +1,5 @@
 export class Categoria {
-    id: string
+    id: number
     nome: string
-    tagIcon: string 
     criadoEm: Date
 }
