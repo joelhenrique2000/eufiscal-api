@@ -10,8 +10,17 @@ export class CidadeService {
   constructor(private prisma: PrismaService) {}
   
   create(createCidadeDto: CreateCidadeDto) {
+    let data = {
+      nome: createCidadeDto.nome,
+      latitude: createCidadeDto.latitude,
+      longitude: createCidadeDto.longitude,
+      estado:{
+        connect: { id: createCidadeDto.estadoID }
+      }
+    };
+
     return this.prisma.cidade.create({
-      data: createCidadeDto,
+      data,
     });
   }
 
@@ -31,6 +40,9 @@ export class CidadeService {
       cursor,
       where,
       orderBy,
+      include: {
+        estado: true, 
+      },
     });
   }
 
@@ -38,6 +50,9 @@ export class CidadeService {
     return this.prisma.cidade.findUnique({
       where: {
         id: id
+      },
+      include: {
+        estado: true, 
       },
     });
   }
@@ -47,6 +62,7 @@ export class CidadeService {
     data: UpdateCidadeDto;
   }): Promise<Cidade> {
     const { where, data } = params;
+    
     return this.prisma.cidade.update({
       data,
       where,

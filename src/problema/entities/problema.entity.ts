@@ -1,21 +1,24 @@
+import { Decimal } from "@prisma/client/runtime"
+import { Categoria } from "src/categoria/entities/categoria.entity"
+import { Cidade } from "src/cidade/entities/cidade.entity"
+import { Status } from "src/status/entities/status.entity"
+
 export class Problema {
     id: number 
     titulo: String 
     descricao: String 
-    urlFoto: String 
+    fotoURL: String 
     isResidente: Boolean
     denunciaIrregular: Boolean
-    nomeCategoria: string
-    categoriaId: number
-    lat: number
-    lng: number
-    cidadeID: number 
-    status: StatusProblema
-    estadoSigla:string
-    cidade:string
+    categoria: Categoria
+    status: Status
+    latitude: Decimal
+    longitude: Decimal
+    statusHistorico?: StatusHistorico
+    cidade: Cidade
 }
 
-class StatusProblema {
+class StatusHistorico {
     abertura: StatusUnitario
     analise: StatusUnitario
     resolvido: StatusUnitario
