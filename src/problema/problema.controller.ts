@@ -14,7 +14,11 @@ export class ProblemaController {
 
   @Get()
   findAll() {
-    return this.problemaService.findAll();
+    return this.problemaService.findAll({
+      where: {
+        removidoEm: null
+      }
+    });
   }
 
   @Get(':id')
@@ -24,11 +28,20 @@ export class ProblemaController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProblemaDto: UpdateProblemaDto) {
-    return this.problemaService.update(+id, updateProblemaDto);
+    return this.problemaService.update({
+      where : {
+        id: +id
+      },
+      data: updateProblemaDto
+    });
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.problemaService.remove(+id);
+    return this.problemaService.remove({
+      where : {
+        id: +id
+      }
+    });
   }
 }

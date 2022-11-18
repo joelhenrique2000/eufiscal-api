@@ -14,7 +14,11 @@ export class UsuarioController {
 
   @Get()
   findAll() {
-    return this.usuarioService.findAll();
+    return this.usuarioService.findAll({
+      where: {
+        removidoEm: null
+      }
+    });
   }
 
   @Get(':id')
@@ -24,11 +28,20 @@ export class UsuarioController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUsuarioDto: UpdateUsuarioDto) {
-    return this.usuarioService.update(+id, updateUsuarioDto);
+    return this.usuarioService.update({
+      where : {
+        id: +id
+      },
+      data: updateUsuarioDto
+    });
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usuarioService.remove(+id);
+    return this.usuarioService.remove({
+      where : {
+        id: +id
+      }
+    });
   }
 }
