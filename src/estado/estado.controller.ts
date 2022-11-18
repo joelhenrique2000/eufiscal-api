@@ -14,7 +14,11 @@ export class EstadoController {
 
   @Get()
   findAll() {
-    return this.estadoService.findAll();
+    return this.estadoService.findAll({
+      where: {
+        removidoEm: null
+      }
+    });
   }
 
   @Get(':id')
@@ -24,11 +28,20 @@ export class EstadoController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateEstadoDto: UpdateEstadoDto) {
-    return this.estadoService.update(+id, updateEstadoDto);
+    return this.estadoService.update({
+      where : {
+        id: +id
+      },
+      data: updateEstadoDto
+    });
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.estadoService.remove(+id);
+    return this.estadoService.remove({
+      where : {
+        id: +id
+      }
+    });
   }
 }

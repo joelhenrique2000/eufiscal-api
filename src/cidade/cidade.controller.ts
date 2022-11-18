@@ -14,7 +14,11 @@ export class CidadeController {
 
   @Get()
   findAll() {
-    return this.cidadeService.findAll();
+    return this.cidadeService.findAll({
+      where: {
+        removidoEm: null
+      }
+    });
   }
 
   @Get(':id')
@@ -24,11 +28,20 @@ export class CidadeController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCidadeDto: UpdateCidadeDto) {
-    return this.cidadeService.update(+id, updateCidadeDto);
+    return this.cidadeService.update({
+      where : {
+        id: +id
+      },
+      data: updateCidadeDto
+    });
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.cidadeService.remove(+id);
+    return this.cidadeService.remove({
+      where : {
+        id: +id
+      }
+    });
   }
 }

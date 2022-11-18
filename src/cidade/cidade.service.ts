@@ -1,26 +1,76 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { PrismaService } from 'src/database/PrismaService';
 import { CreateCidadeDto } from './dto/create-cidade.dto';
 import { UpdateCidadeDto } from './dto/update-cidade.dto';
+import { Cidade } from './entities/cidade.entity';
 
 @Injectable()
 export class CidadeService {
+  constructor(private prisma: PrismaService) {}
+  
   create(createCidadeDto: CreateCidadeDto) {
-    return 'This action adds a new cidade';
+    return this.prisma.cidade.create({
+      data: createCidadeDto,
+    });
   }
 
-  findAll() {
-    return `This action returns all cidade`;
+  findAll(
+    params: {
+      skip?: number;
+      take?: number;
+      cursor?: Prisma.CidadeWhereUniqueInput;
+      where?: Prisma.CidadeWhereInput;
+      orderBy?: Prisma.CidadeOrderByWithRelationInput;
+    }
+  ) : Promise<Cidade[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.prisma.cidade.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} cidade`;
+  findOne(id: number) : Promise<Cidade | null> {
+    return this.prisma.cidade.findUnique({
+      where: {
+        id: id
+      },
+    });
   }
 
-  update(id: number, updateCidadeDto: UpdateCidadeDto) {
-    return `This action updates a #${id} cidade`;
+  async update(params: {
+    where: Prisma.CidadeWhereUniqueInput;
+    data: UpdateCidadeDto;
+  }): Promise<Cidade> {
+    const { where, data } = params;
+    return this.prisma.cidade.update({
+      data,
+      where,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cidade`;
+  remove(params: {
+    where: Prisma.CidadeWhereUniqueInput;
+  }): Promise<Cidade> {
+
+    let removidoEm = new Date();
+
+    const { where } = params;
+    return this.prisma.cidade.update({
+      data: {
+        removidoEm
+      },
+      where,
+    });
+  }
+
+  async deleteCidade(where: Prisma.CidadeWhereUniqueInput): Promise<Cidade> {
+    return this.prisma.cidade.delete({
+      where,
+    });
   }
 }
