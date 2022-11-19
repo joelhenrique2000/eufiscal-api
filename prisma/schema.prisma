@@ -52,6 +52,7 @@ model Problema {
 
 model HistoricoProblema{
   id Int @id @default(autoincrement())
+  data DateTime   @default(now())
   problema    Problema    @relation(fields: [problemaID], references: [id])
   problemaID  Int
   status    Status    @relation(fields: [statusID], references: [id])

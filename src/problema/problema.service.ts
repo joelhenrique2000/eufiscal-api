@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/database/PrismaService';
 import { CreateProblemaDto } from './dto/create-problema.dto';
 import { UpdateProblemaDto } from './dto/update-problema.dto';
-import { Problema } from './entities/problema.entity';
+import { HistoricoProblema, Problema } from './entities/problema.entity';
 
 @Injectable()
 export class ProblemaService {
@@ -167,6 +167,29 @@ export class ProblemaService {
     };
     return this.prisma.historicoProblema.create({
       data,
+    });
+  }
+
+  findHistoricos(
+    params: {
+      skip?: number;
+      take?: number;
+      cursor?: Prisma.HistoricoProblemaWhereUniqueInput;
+      where?: Prisma.HistoricoProblemaWhereInput;
+      orderBy?: Prisma.HistoricoProblemaOrderByWithRelationInput;
+    }
+  ) : Promise<HistoricoProblema[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.prisma.historicoProblema.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+      include: {
+        status: true,
+        problema: false
+      },
     });
   }
 }

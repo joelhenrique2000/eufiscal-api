@@ -28,3 +28,10 @@ class StatusUnitario {
     data: Date
     descricao: string
 }
+
+export class HistoricoProblema {
+    id: number 
+    data: Date
+    problema?: Problema
+    status: Status
+}
