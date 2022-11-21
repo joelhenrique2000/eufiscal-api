@@ -1,8 +1,10 @@
+import { Decimal } from "@prisma/client/runtime"
+import { Estado } from "src/estado/entities/estado.entity"
+
 export class Cidade {
     id: number
     nome: string
-    estado: string
-    estadoID: number
-    latitude: number
-    longitude: number
+    estado?: Estado
+    latitude: Decimal 
+    longitude: Decimal 
 }

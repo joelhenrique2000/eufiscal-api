@@ -1,8 +1,13 @@
-export class CreateProblemaDto {
-    descricao: String 
-    fotoURL: String 
-    isResidente: Boolean
+export class CreateProblemaDto {    
+    titulo: string 
+    fotoURL: string 
+    fotoId: string
+    cidadeID: number 
+    statusID: number 
+    categoriaId: number
+    timestamp: Date
+    isResidente: boolean
     latitude: number
     longitude: number
-    cidadeID: number 
+    descricao: string
 }

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "HistoricoProblema" ADD COLUMN     "data" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;

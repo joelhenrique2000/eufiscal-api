@@ -31,12 +31,14 @@ model Status {
 
 model Problema {
   id Int @id @default(autoincrement())
+  titulo String 
   descricao String 
   fotoURL String 
   isResidente Boolean
-  latitude BigInt
-  longitude BigInt 
-  criadoEm DateTime @default(now())
+  denunciaIrregular Boolean
+  latitude Decimal
+  longitude Decimal 
+  criadoEm DateTime 
   atualizadoEm DateTime? @updatedAt
   removidoEm DateTime?
   categoria    Categoria    @relation(fields: [categoriaID], references: [id])
@@ -50,6 +52,7 @@ model Problema {
 
 model HistoricoProblema{
   id Int @id @default(autoincrement())
+  data DateTime   @default(now())
   problema    Problema    @relation(fields: [problemaID], references: [id])
   problemaID  Int
   status    Status    @relation(fields: [statusID], references: [id])
@@ -81,8 +84,8 @@ model Estado {
 model Cidade {
   id Int @id @default(autoincrement())
   nome String 
-  latitude BigInt
-  longitude BigInt 
+  latitude Decimal
+  longitude Decimal 
   criadoEm DateTime @default(now())
   atualizadoEm DateTime? @updatedAt
   removidoEm DateTime?
