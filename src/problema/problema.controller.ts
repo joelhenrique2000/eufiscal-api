@@ -26,45 +26,44 @@ export class ProblemaController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    let problema: Problema;
-    let historico: HistoricoProblema[];
-    this.problemaService.findOne(+id).then(x => problema = x)
-    this.problemaService.findHistoricos({
-      where: {
-        problemaID: +id
-      }
-    }).then(x => historico = x)
-
-    problema.statusHistorico = { 
-      abertura: null,
-      analise: null,
-      resolvido: null,
-    };
-
-    historico.forEach(element => {
-      if(element.status.id == 1){
-        problema.statusHistorico.abertura = {
-          data: element.data,
-          descricao: "Inicio da denuncia"
+    return this.problemaService.findOne(+id).then(problema => {
+      return this.problemaService.findHistoricos({
+        where: {
+          problemaID: +id
         }
-      }
-      
-      if(element.status.id == 2){
-        problema.statusHistorico.analise = {
-          data: element.data,
-          descricao: "Denuncia foi analisada e aceita. Está aguardando a resposta do órgão responsável."
-        }
-      }
-      
-      if(element.status.id == 3){
-        problema.statusHistorico.resolvido = {
-          data: element.data,
-          descricao: "Denuncia vista por órgão responsável e o problema foi solucionado."
-        }
-      }
-    });
+      }).then(historico => {
+        problema.statusHistorico = { 
+          abertura: null,
+          analise: null,
+          resolvido: null,
+        };
 
-    return this.problemaService.findOne(+id);
+        historico.forEach(element => {
+          if(element.status.id == 1){
+            problema.statusHistorico.abertura = {
+              data: element.data,
+              descricao: "Inicio da denuncia"
+            }
+          }
+          
+          if(element.status.id == 2){
+            problema.statusHistorico.analise = {
+              data: element.data,
+              descricao: "Denuncia foi analisada e aceita. Está aguardando a resposta do órgão responsável."
+            }
+          }
+          
+          if(element.status.id == 3){
+            problema.statusHistorico.resolvido = {
+              data: element.data,
+              descricao: "Denuncia vista por órgão responsável e o problema foi solucionado."
+            }
+          }
+        });
+        return problema;
+      })
+
+    })
   }
 
   @Post(':id/atualizarStatus')
