@@ -1,3 +1,4 @@
+import { AuthModule } from './auth/auth.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -10,8 +11,19 @@ import { CidadeModule } from './cidade/cidade.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [CategoriaModule, StatusModule, ProblemaModule, UsuarioModule, CidadeModule, EstadoModule, ConfigModule.forRoot()],
+  imports: [
+    AuthModule,
+    CategoriaModule,
+    StatusModule,
+    ProblemaModule,
+    UsuarioModule,
+    CidadeModule,
+    EstadoModule,
+    ConfigModule.forRoot(),
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+  ],
 })
 export class AppModule {}

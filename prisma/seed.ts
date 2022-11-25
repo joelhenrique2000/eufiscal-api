@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
-import { estados } from './seed/estados';
+import { categorias } from './seed/categorias';
 import { cidades } from './seed/municipios';
+import { estados } from './seed/estados';
+import { status } from './seed/status';
 
 const prisma = new PrismaClient();
 
@@ -26,6 +28,22 @@ async function main() {
                         id: cidade.estadoID
                     }
                 }
+            }
+        })
+    }
+    for(let categoria of categorias){
+        await prisma.categoria.create({
+            data: {
+                nome: categoria.nome,
+                atualizadoEm: null,
+            }
+        })
+    }
+    for(let stat of status){
+        await prisma.status.create({
+            data: {
+                nome: stat.nome,
+                atualizadoEm: null,
             }
         })
     }

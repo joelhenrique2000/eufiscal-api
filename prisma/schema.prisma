@@ -64,7 +64,7 @@ model Usuario {
   id Int @id @default(autoincrement())
   nome String 
   cpf String 
-  email String 
+  email String @unique
   senha String 
   criadoEm DateTime   @default(now())
   atualizadoEm DateTime? @updatedAt
