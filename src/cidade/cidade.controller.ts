@@ -14,12 +14,11 @@ export class CidadeController {
     return this.cidadeService.create(createCidadeDto);
   }
 
-  @Get('findAll/:nome')
-  findAll(@Param('nome') nome: string) {
+  @Get()
+  findAll() {
     return this.cidadeService.findAll({
       where: {
         removidoEm: null,
-        nome: nome,
       }
     });
   }
