@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ProblemaService } from './problema.service';
 import { CreateProblemaDto } from './dto/create-problema.dto';
 import { UpdateProblemaDto } from './dto/update-problema.dto';
@@ -19,8 +19,8 @@ export class ProblemaController {
     });
   }
 
-  @Get(':statusID/:categoriaID/:cidadeID')
-  findAll(@Param('statusID') statusID: string, @Param('categoriaID') categoriaID: string, @Param('cidadeID') cidadeID: string) {
+  @Get()
+  findAll(@Query('statusID') statusID: string, @Query('categoriaID') categoriaID: string, @Query('cidadeID') cidadeID: string) {
    
     return this.problemaService.findAll({
       where: {
