@@ -19,11 +19,15 @@ export class ProblemaController {
     });
   }
 
-  @Get()
-  findAll() {
+  @Get(':statusID/:categoriaID/:cidadeID')
+  findAll(@Param('statusID') statusID: string, @Param('categoriaID') categoriaID: string, @Param('cidadeID') cidadeID: string) {
+   
     return this.problemaService.findAll({
       where: {
-        removidoEm: null
+        removidoEm: null,
+        statusID: +statusID,
+        categoriaID: +categoriaID,
+        cidadeID: +cidadeID,
       }
     });
   }
