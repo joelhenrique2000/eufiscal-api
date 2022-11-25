@@ -3,16 +3,20 @@ import { ProblemaService } from './problema.service';
 import { CreateProblemaDto } from './dto/create-problema.dto';
 import { UpdateProblemaDto } from './dto/update-problema.dto';
 import { HistoricoProblema, Problema } from './entities/problema.entity';
+import { FirebaseService } from 'src/firebase/firebase.service';
 
 @Controller('problema')
 export class ProblemaController {
-  constructor(private readonly problemaService: ProblemaService) {}
+  constructor(private readonly problemaService: ProblemaService, private readonly firebaseService: FirebaseService) {}
 
   @Post()
   create(@Body() createProblemaDto: CreateProblemaDto) {
-    let problema = this.problemaService.create(createProblemaDto);
-    problema.then(x => this.problemaService.createHistorico({ id: x.id, statusID: x.statusID}));
-    return problema;
+    return this.firebaseService.getFotoUrl(createProblemaDto.fotoId).then( foto => {
+      createProblemaDto.fotoURL = foto;
+      let problema = this.problemaService.create(createProblemaDto);
+      problema.then(x => this.problemaService.createHistorico({ id: x.id, statusID: x.statusID}));
+      return problema;
+    });
   }
 
   @Get()
@@ -113,4 +117,10 @@ export class ProblemaController {
       }
     });
   }
+
+  @Get('firebase/:id')
+  buscarFoto(@Param('id') id: string) {
+    return this.firebaseService.getFotoUrl(id);
+  }
+
 }
