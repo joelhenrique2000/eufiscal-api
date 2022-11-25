@@ -4,6 +4,7 @@ import { PrismaService } from 'src/database/PrismaService';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { Usuario } from './entities/usuario.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuarioService {
@@ -11,7 +12,12 @@ export class UsuarioService {
   
   create(createUsuarioDto: CreateUsuarioDto) {
     return this.prisma.usuario.create({
-      data: createUsuarioDto,
+      data: {
+        nome: createUsuarioDto.nome,
+        cpf: createUsuarioDto.cpf,
+        email: createUsuarioDto.email,
+        senha: bcrypt.hashSync(createUsuarioDto.senha, 10),
+      },
     });
   }
 
@@ -38,6 +44,14 @@ export class UsuarioService {
     return this.prisma.usuario.findUnique({
       where: {
         id: id
+      },
+    });
+  }
+
+  findByEmail(email: string) : Promise<Usuario | null> {
+    return this.prisma.usuario.findUnique({
+      where: {
+        email: email
       },
     });
   }
