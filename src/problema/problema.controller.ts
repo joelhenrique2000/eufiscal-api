@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ProblemaService } from './problema.service';
 import { CreateProblemaDto } from './dto/create-problema.dto';
 import { UpdateProblemaDto } from './dto/update-problema.dto';
 import { HistoricoProblema, Problema } from './entities/problema.entity';
 import { FirebaseService } from 'src/firebase/firebase.service';
+import { JwtAuthGuard } from 'src/auth/shared/jwt-auth.guard';
 
 @Controller('problema')
 export class ProblemaController {
@@ -74,6 +76,7 @@ export class ProblemaController {
     })
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post(':id/atualizarStatus')
   atualizarStatus(@Param('id') id: string) {
     var problema = this.problemaService.findOne(+id);
@@ -103,6 +106,7 @@ export class ProblemaController {
     );
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProblemaDto: UpdateProblemaDto) {
     return this.problemaService.update({
@@ -113,6 +117,7 @@ export class ProblemaController {
     });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.problemaService.remove({

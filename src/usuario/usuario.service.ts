@@ -4,7 +4,7 @@ import { PrismaService } from 'src/database/PrismaService';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { Usuario } from './entities/usuario.entity';
-import * as bcrypt from 'bcrypt';
+const bcrypt = require('bcrypt');
 
 @Injectable()
 export class UsuarioService {
