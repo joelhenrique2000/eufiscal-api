@@ -3,68 +3,75 @@ import { ProblemaService } from './problema.service';
 import { CreateProblemaDto } from './dto/create-problema.dto';
 import { UpdateProblemaDto } from './dto/update-problema.dto';
 import { HistoricoProblema, Problema } from './entities/problema.entity';
+import { FirebaseService } from 'src/firebase/firebase.service';
 
 @Controller('problema')
 export class ProblemaController {
-  constructor(private readonly problemaService: ProblemaService) {}
+  constructor(private readonly problemaService: ProblemaService, private readonly firebaseService: FirebaseService) {}
 
   @Post()
   create(@Body() createProblemaDto: CreateProblemaDto) {
-    let problema = this.problemaService.create(createProblemaDto);
-    problema.then(x => this.problemaService.createHistorico({ id: x.id, statusID: x.statusID}));
-    return problema;
+    return this.firebaseService.getFotoUrl(createProblemaDto.fotoId).then( foto => {
+      createProblemaDto.fotoURL = foto;
+      let problema = this.problemaService.create(createProblemaDto);
+      problema.then(x => this.problemaService.createHistorico({ id: x.id, statusID: x.statusID}));
+      return problema;
+    });
   }
 
-  @Get()
-  findAll() {
+  @Get(':statusID/:categoriaID/:cidadeID')
+  findAll(@Param('statusID') statusID: string, @Param('categoriaID') categoriaID: string, @Param('cidadeID') cidadeID: string) {
+   
     return this.problemaService.findAll({
       where: {
-        removidoEm: null
+        removidoEm: null,
+        statusID: +statusID,
+        categoriaID: +categoriaID,
+        cidadeID: +cidadeID,
       }
     });
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    let problema: Problema;
-    let historico: HistoricoProblema[];
-    this.problemaService.findOne(+id).then(x => problema = x)
-    this.problemaService.findHistoricos({
-      where: {
-        problemaID: +id
-      }
-    }).then(x => historico = x)
-
-    problema.statusHistorico = { 
-      abertura: null,
-      analise: null,
-      resolvido: null,
-    };
-
-    historico.forEach(element => {
-      if(element.status.id == 1){
-        problema.statusHistorico.abertura = {
-          data: element.data,
-          descricao: "Inicio da denuncia"
+    return this.problemaService.findOne(+id).then(problema => {
+      return this.problemaService.findHistoricos({
+        where: {
+          problemaID: +id
         }
-      }
-      
-      if(element.status.id == 2){
-        problema.statusHistorico.analise = {
-          data: element.data,
-          descricao: "Denuncia foi analisada e aceita. Está aguardando a resposta do órgão responsável."
-        }
-      }
-      
-      if(element.status.id == 3){
-        problema.statusHistorico.resolvido = {
-          data: element.data,
-          descricao: "Denuncia vista por órgão responsável e o problema foi solucionado."
-        }
-      }
-    });
+      }).then(historico => {
+        problema.statusHistorico = { 
+          abertura: null,
+          analise: null,
+          resolvido: null,
+        };
 
-    return this.problemaService.findOne(+id);
+        historico.forEach(element => {
+          if(element.status.id == 1){
+            problema.statusHistorico.abertura = {
+              data: element.data,
+              descricao: "Inicio da denuncia"
+            }
+          }
+          
+          if(element.status.id == 2){
+            problema.statusHistorico.analise = {
+              data: element.data,
+              descricao: "Denuncia foi analisada e aceita. Está aguardando a resposta do órgão responsável."
+            }
+          }
+          
+          if(element.status.id == 3){
+            problema.statusHistorico.resolvido = {
+              data: element.data,
+              descricao: "Denuncia vista por órgão responsável e o problema foi solucionado."
+            }
+          }
+        });
+        return problema;
+      })
+
+    })
   }
 
   @Post(':id/atualizarStatus')
@@ -114,4 +121,10 @@ export class ProblemaController {
       }
     });
   }
+
+  @Get('firebase/:id')
+  buscarFoto(@Param('id') id: string) {
+    return this.firebaseService.getFotoUrl(id);
+  }
+
 }
