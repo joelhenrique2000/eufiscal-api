@@ -22,15 +22,25 @@ export class ProblemaController {
 
   @Get()
   findAll(@Query('statusID') statusID: string, @Query('categoriaID') categoriaID: string, @Query('cidadeID') cidadeID: string) {
-   
-    return this.problemaService.findAll({
+    let filtro = {
       where: {
         removidoEm: null,
         statusID: +statusID,
         categoriaID: +categoriaID,
         cidadeID: +cidadeID,
       }
-    });
+    }
+
+    if(!statusID)
+      delete filtro.where.statusID
+    
+    if(!categoriaID)
+      delete filtro.where.categoriaID
+
+    if(!cidadeID)
+      delete filtro.where.cidadeID
+      
+    return this.problemaService.findAll(filtro);
   }
 
   @Get(':id')
