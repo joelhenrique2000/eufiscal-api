@@ -1,5 +1,4 @@
-
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
 import { ProblemaService } from './problema.service';
 import { CreateProblemaDto } from './dto/create-problema.dto';
 import { UpdateProblemaDto } from './dto/update-problema.dto';
@@ -21,17 +20,27 @@ export class ProblemaController {
     });
   }
 
-  @Get(':statusID/:categoriaID/:cidadeID')
-  findAll(@Param('statusID') statusID: string, @Param('categoriaID') categoriaID: string, @Param('cidadeID') cidadeID: string) {
-   
-    return this.problemaService.findAll({
+  @Get()
+  findAll(@Query('statusID') statusID: string, @Query('categoriaID') categoriaID: string, @Query('cidadeID') cidadeID: string) {
+    let filtro = {
       where: {
         removidoEm: null,
         statusID: +statusID,
         categoriaID: +categoriaID,
         cidadeID: +cidadeID,
       }
-    });
+    }
+
+    if(!statusID)
+      delete filtro.where.statusID
+    
+    if(!categoriaID)
+      delete filtro.where.categoriaID
+
+    if(!cidadeID)
+      delete filtro.where.cidadeID
+      
+    return this.problemaService.findAll(filtro);
   }
 
   @Get(':id')
