@@ -90,35 +90,34 @@ export class ProblemaController {
   atualizarStatus(@Param('id') id: string) {
     var problema = this.problemaService.findOne(+id);
     let problemaStatus = 0; 
-    problema.then( x=> {
+    return problema.then( x => {
       problemaStatus = x.status.id
       if(problemaStatus == 1)
-      problemaStatus= 2;
-    else if (problemaStatus == 2)
-      problemaStatus = 3;
-    else
-      return {
-        mensagem: "Status não pode ser alterado"
-      };     
-      this.problemaService.createHistorico({ id: +id, statusID: problemaStatus});
-
-    }).then(x => {
-      return this.problemaService.updateStatus(
-      {
-        where : {
-          id: +id
-        },
-        data: {
-          id:  +id,
-          statusID: problemaStatus
-        }
-      }
-    );
-  });
-                                             
-      
-    
-    
+        problemaStatus= 2;
+      else if (problemaStatus == 2)
+        problemaStatus = 3;
+      else
+        return {
+          mensagem: "Status não pode ser alterado"
+        };     
+      return this.problemaService.createHistorico({ id: +id, statusID: problemaStatus}).then( hist => {
+        return this.problemaService.updateStatus(
+          {
+            where : {
+              id: +id
+            },
+            data: {
+              id:  +id,
+              statusID: problemaStatus
+            }
+          }
+        ).then(stats => {
+          return {
+            mensagem: "Status alterado com sucesso"
+          }
+        })
+      });
+    })   
   }
 
   @UseGuards(JwtAuthGuard)
